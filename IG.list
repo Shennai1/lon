@@ -1,3 +1,12 @@
 # IG拦截
 
-DOMAIN-SUFFIX, fb.com,REJECT
+DOMAIN-SUFFIX, fb.com
+DOMAIN-SUFFIX, edge-mqtt.facebook.com
+DOMAIN-SUFFIX, commect.facebook.net
+DOMAIN-SUFFIX, pixel.facebook.com
+DOMAIN-SUFFIX, facebook.com
+DOMAIN-SUFFIX, api.instagram.com
+DOMAIN-SUFFIX, akamaihd.net
+DOMAIN-SUFFIX, fbcdn.net
+DOMAIN-SUFFIX, graph.instagram.com
+DOMAIN-SUFFIX, graph.facebook.com
