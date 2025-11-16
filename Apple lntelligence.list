@@ -8,8 +8,6 @@ DOMAIN-SUFFIX, apple-relay.fastly-edge.com
 DOMAIN-SUFFIX, cp4.cloudflare.com
 DOMAIN-SUFFIX, apple-relay.akamaized.net
 DOMAIN-SUFFIX, apple-relay.mask.apple-dns.net
-DOMAIN-SUFFIX, gateway.iclud.com
 DOMAIN-SUFFIX, gspe1-ssl.ls.apple.com
-IP-CIDR, 17.248.152.113/24
-IP-CIDR, 17.248.152.145/24
+IP-CIDR, 17.0.0.0/8
 DOMAIN-KEYWORD, apple-relay
