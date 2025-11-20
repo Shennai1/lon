@@ -1,6 +1,5 @@
 # 可能减少IG信息搜集
 
-
 DOMAIN-SUFFIX, edge-mqtt.facebook.com
 DOMAIN-SUFFIX, commect.facebook.net
 DOMAIN-SUFFIX, pixel.facebook.com
@@ -9,6 +8,5 @@ DOMAIN-SUFFIX, connect.facebook.net
 DOMAIN-SUFFIX, graph.fbpigeon.com
 DOMAIN-SUFFIX, api.instagram.com
 DOMAIN-SUFFIX, akamaihd.net
-DOMAIN-SUFFIX, fbcdn.net
 DOMAIN-SUFFIX, graph.instagram.com
 DOMAIN-SUFFIX, graph.facebook.com
