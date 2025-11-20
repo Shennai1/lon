@@ -1,6 +1,6 @@
 # 可能减少IG信息搜集
 
-DOMAIN-SUFFIX, fb.com
+
 DOMAIN-SUFFIX, edge-mqtt.facebook.com
 DOMAIN-SUFFIX, commect.facebook.net
 DOMAIN-SUFFIX, pixel.facebook.com
