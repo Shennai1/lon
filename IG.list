@@ -1,5 +1,13 @@
-# 可能减少IG信息搜集
+# TikTok
+DOMAIN-SUFFIX, ibeacon.tiktok.com
+DOMAIN-SUFFIX, analytics.tiktok.com
+DOMAIN-SUFFIX, ads.tiktok.com
 
+# 可能减少IG信息搜集
+DOMAIN-SUFFIX, analytics.instagram.com
+DOMAIN-SUFFIX, ibeacon.instagram.com
+DOMAIN-SUFFIX, business.instagram.com
+DOMAIN-SUFFIX, ads.instagram.com
 DOMAIN-SUFFIX, api.instagram.com
 DOMAIN-SUFFIX, akamaihd.net
 DOMAIN-SUFFIX, graph.facebook.com
