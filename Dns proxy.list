@@ -1,5 +1,5 @@
 DNS解析proxy
 
 IP-CIDR, 45.90.28.0/24
-DOMAIN, dns.nextdns.io
 DOMAIN, d.adguard-dns.com
+DOMAIN, dns.nextdns.io
