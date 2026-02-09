@@ -1,3 +1,6 @@
+[General]
+
+[Host]
 # 哔哩哔哩
 *.bilibili.com = server:https://dns.alidns.com/dns-query
 *.bilivideo.com = server:https://dns.alidns.com/dns-query
