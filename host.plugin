@@ -1,4 +1,7 @@
 [General]
 
 [Host]
-*.233netpro.com = server:https://dns.nextdns.io/6c44cd
+#*.233netpro.com = server:https://dns.nextdns.io/6c44cd
+*.sbs = server:https://wrecking7857.com:44443/dns-query/3a23d3fb-ab52-454e-b0a8-04febc53355e
+*.sbs = server:https://carrousel6917.com:44443/dns-query/3a23d3fb-ab52-454e-b0a8-04febc53355e
+*.sbs = server:https://simmering3378.com:443/dns-query/3a23d3fb-ab52-454e-b0a8-04febc53355e
