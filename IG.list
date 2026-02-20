@@ -1,3 +1,19 @@
+# Twitter
+DOMAIN-SUFFIX, ads.api.twitter.com
+DOMAIN-SUFFIX, ads-api.twitter.com
+DOMAIN-SUFFIX, analytics.twitter.com
+DOMAIN-SUFFIX, ads-bidder-api.twitter.com
+DOMAIN-SUFFIX, ads-twitter.com
+DOMAIN-SUFFIX, analytics.twitter.com
+DOMAIN-SUFFIX, p.twitter.com
+DOMAIN-SUFFIX, poorlytwitter.com
+DOMAIN-SUFFIX, twitter-badges.s3.amazonaws.com
+DOMAIN-SUFFIX, twitterchest.com
+DOMAIN-SUFFIX, twitterexpend.cyou
+DOMAIN-SUFFIX, twitterfollowers.site
+DOMAIN-SUFFIX, urls.api.twitter.com
+DOMAIN-SUFFIX, video-twimg.vip
+
 # TikTok
 DOMAIN-SUFFIX, ibeacon.tiktok.com
 DOMAIN-SUFFIX, analytics.tiktok.com
@@ -20,4 +36,3 @@ DOMAIN-SUFFIX, pixel.facebook.com
 DOMAIN-SUFFIX, edge-mqtt.facebook.com
 DOMAIN-KEYWORD, sponsored_reel
 DOMAIN-KEYWORD, facebook-ads
-
