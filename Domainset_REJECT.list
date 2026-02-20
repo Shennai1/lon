@@ -24,6 +24,18 @@ DOMAIN-SUFFIX, ads.tiktok.com
 
 # 可能减少IG信息搜集
 URL-REGEX, .*instagram.*reel.*ad.*
+DOMAIN-SUFFIX, badges.instagram.com
+DOMAIN-SUFFIX, graph-fallback.instagram.com
+DOMAIN-SUFFIX, kkinstagram.com
+DOMAIN-SUFFIX, logger.instagram.com
+DOMAIN-SUFFIX, an.facebook.com
+DOMAIN-SUFFIX, analytics.facebook.com
+DOMAIN-SUFFIX, badge.facebook.com
+DOMAIN-SUFFIX, clutchpoints-facebook.4taps.me
+DOMAIN-SUFFIX, facebook-ads.hara.vn
+DOMAIN-SUFFIX, facebook-repto1040s2.ahlamountada.com
+DOMAIN-SUFFIX, facebookinbox-omni-onapp.haravan.com
+DOMAIN-SUFFIX, tr.facebook.com
 DOMAIN-SUFFIX, analytics.instagram.com
 DOMAIN-SUFFIX, ibeacon.instagram.com
 DOMAIN-SUFFIX, business.instagram.com
