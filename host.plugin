@@ -372,6 +372,8 @@ upos-sz-upcdntx.bilivideo.com = server:119.29.29.29
 *.zte.com.cn = server:https://223.5.5.5/dns-query
 
 # 补充
+# 拼多多
+*.pinduoduo.com = server:https://223.5.5.5/dns-query
 #中国移动
 *.10086.cn = server:https://223.5.5.5/dns-query
 #keep
@@ -385,7 +387,8 @@ upos-sz-upcdntx.bilivideo.com = server:119.29.29.29
 *.sinaimg.cn = server:https://223.5.5.5/dns-query
 *.soutushenqi.com = server:https://223.5.5.5/dns-query
 *.duitang.com = server:https://223.5.5.5/dns-query
-
+*.huaban.com = server:https://223.5.5.5/dns-query
+*.itc.cn = server:https://223.5.5.5/dns-query
 # 中国政府网
 *.net.cn = server:https://223.5.5.5/dns-query
 *.gov.cn = server:https://223.5.5.5/dns-query
@@ -393,5 +396,6 @@ upos-sz-upcdntx.bilivideo.com = server:119.29.29.29
 
 # 其他
 *.com.cn = server:https://223.5.5.5/dns-query
+
 
 
