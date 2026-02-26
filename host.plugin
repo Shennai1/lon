@@ -1,6 +1,35 @@
 [General]
 
 [Host]
+
+# 哔哩哔哩
+*.bilibili.com = server:https://223.5.5.5/dns-query
+*.bilivideo.com = server:https://223.5.5.5/dns-query
+*.bilivideo.cn = server:https://223.5.5.5/dns-query
+*.bilivideo.net = server:https://223.5.5.5/dns-query
+*.hdslb.com = server:https://223.5.5.5/dns-query
+*.hdslb.net = server:https://223.5.5.5/dns-query
+*.biliapi.com = server:https://223.5.5.5/dns-query
+*.biliapi.net = server:https://223.5.5.5/dns-query
+# > BiliBili
+# BiliBili upos视频服务器（阿里云）
+upos-sz-mirrorali.bilivideo.com = server:https://223.5.5.5/dns-query
+upos-sz-mirrorali?.bilivideo.com = server:https://223.5.5.5/dns-query
+upos-sz-mirrorali??.bilivideo.com = server:https://223.5.5.5/dns-query
+# BiliBili upos视频服务器（百度云）
+upos-sz-mirrorbos.bilivideo.com = server:180.76.76.76
+# BiliBili upos视频服务器（腾讯云）
+upos-sz-mirrorcos.bilivideo.com = server:119.29.29.29
+upos-sz-mirrorcos?.bilivideo.com = server:119.29.29.29
+upos-sz-mirrorcos??.bilivideo.com = server:119.29.29.29
+# BiliBili upos视频服务器（百度云）
+upos-sz-upcdnbd??.bilivideo.com = server:180.76.76.76
+# BiliBili upos视频服务器（腾讯云）
+upos-sz-upcdntx.bilivideo.com = server:119.29.29.29
+
+# 极验人机滑块验证 (防无法登录)
+*.geetest.com = server:https://223.5.5.5/dns-query
+
 # 海尔
 *.haier.net = server:https://223.5.5.5/dns-query
 *.haier.com = server:https://223.5.5.5/dns-query
@@ -14,7 +43,6 @@
 # 什么值得买
 *.zdmimg.com = server:https://223.5.5.5/dns-query
 *.smzdm.com = server:https://223.5.5.5/dns-query
-*.geetest.com = server:https://223.5.5.5/dns-query
 
 #京东
 *.jd.com = server:https://223.5.5.5/dns-query
@@ -39,3 +67,100 @@
 *.126.net = server:https://223.5.5.5/dns-query
 *.163.com = server:https://223.5.5.5/dns-query
 *.163yun.com = server:https://223.5.5.5/dns-query
+
+#小黑盒
+*.xiaoheihe.cn = server:https://223.5.5.5/dns-query
+*.maxjia.com = server:https://223.5.5.5/dns-query
+*.heybox.net = server:https://223.5.5.5/dns-query
+
+#美图秀秀
+*.meitu.com = server:https://223.5.5.5/dns-query
+*.xiuxiu.com = server:https://223.5.5.5/dns-query
+*.meitudata.com = server:https://223.5.5.5/dns-query
+*.meitustat.com = server:https://223.5.5.5/dns-query
+*.meipai.com = server:https://223.5.5.5/dns-query
+
+#番茄小说
+*.pstatp.com = server:223.5.5.5
+*.fqnovel.com = server:223.5.5.5
+*.fanqienovel.com = server:223.5.5.5
+# > 字节跳动
+# 艾特迷
+*.amemv.com = server:180.184.1.1
+# 西瓜 图片服务
+*.bdxiguaimg.com = server:180.184.1.1
+# 西瓜 静态资源
+*.bdxiguastatic.com = server:180.184.1.1
+# 字节跳动 UNPKG
+*.byted-static.com = server:180.184.1.1
+# 字节跳动
+*.bytedance.* = server:180.184.1.1
+# 字节跳动 DNS
+*.bytedns.net = server:180.184.1.1
+# 字节跳动 CDN 文件存储
+*.bytednsdoc.com = server:180.184.1.1
+# 字节跳动 Goofy
+*.bytegoofy.com = server:180.184.1.1
+# 字节跳动 图片服务
+*.byteimg.com = server:180.184.1.1
+# 字节跳动 SCM
+*.bytescm.com = server:180.184.1.1
+# 字节跳动 TOS
+*.bytetos.com = server:180.184.1.1
+# 飞书企业服务平台
+*.bytexservice.com = server:180.184.1.1
+# 抖音
+*.douyin.com = server:180.184.1.1
+# 抖音 静态资源
+*.douyinpic.com = server:180.184.1.1
+# 抖音 静态资源
+*.douyinstatic.com = server:180.184.1.1
+# 抖音 静态资源
+*.douyinvod.com = server:180.184.1.1
+# FeelGood平台
+*.feelgood.cn = server:180.184.1.1
+# 飞聊官网
+*.feiliao.com = server:180.184.1.1
+# 快手
+*.gifshow.com = server:180.184.1.1
+# 火山网
+*.huoshan.com = server:180.184.1.1
+# 火山直播
+*.huoshanzhibo.com = server:180.184.1.1
+# 抖音 dapm
+*.ibytedapm.com = server:180.184.1.1
+# 抖音 CDN
+*.iesdouyin.com = server:180.184.1.1
+# 西瓜视频
+*.ixigua.com = server:180.184.1.1
+# 快手
+*.kspkg.com = server:180.184.1.1
+# 抖音 静态资源
+*.pstatp.com = server:180.184.1.1
+# 今日头条
+*.snssdk.com = server:180.184.1.1
+# 今日头条
+*.toutiao.com = server:180.184.1.1
+# 今日头条
+*.toutiao13.com = server:180.184.1.1
+# 今日头条 静态资源
+*.toutiao???.??? = server:180.184.1.1
+# 头条云
+*.toutiaocloud.cn = server:180.184.1.1
+# 头条云
+*.toutiaocloud.com = server:180.184.1.1
+# 今日头条 建站
+*.toutiaopage.com = server:180.184.1.1
+# 悟空
+*.wukong.com = server:180.184.1.1
+# 字节跳动 API
+*.zijieapi.com = server:180.184.1.1
+# 字节跳动 图片服务
+*.zijieimg.com = server:180.184.1.1
+# 今日头条 网页版
+*.zjbyte.com = server:180.184.1.1
+# 字节跳动 CDN
+*.zjcdn.com = server:180.184.1.1
+
+
+
