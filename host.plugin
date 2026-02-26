@@ -356,3 +356,20 @@ upos-sz-upcdntx.bilivideo.com = server:119.29.29.29
 *.zdmimg.com = server:https://223.5.5.5/dns-query
 *.smzdm.com = server:https://223.5.5.5/dns-query
 
+#中国银行
+*.unionpay.com = server:system
+*.boc.cn = server:system
+#农业银行
+*.abchina.com = server:system
+建设银行
+*.ccb.com = server:system
+*.95516.com = server:system
+
+# 中兴
+*.ztehome.com.cn = server:system
+*.ztedevice.com = server:system
+*.zte.com.cn = server:system
+
+# 中国政府网
+*.gov.cn = server:system
+*.政务 = server:system
