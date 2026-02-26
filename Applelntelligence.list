@@ -1,6 +1,8 @@
 # Siri AI
 
 DOMAIN-SUFFIX, guzzoni.apple.com
+DOMAIN-SUFFIX, gateway.icloud.com
+DOMAIN-SUFFIX, smoot.apple.com
 DOMAIN-SUFFIX, *.smoot.apple.com
 DOMAIN-SUFFIX, apple-relay.apple.com
 DOMAIN-SUFFIX, aoole-relay.cloudflare.com
