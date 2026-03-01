@@ -1,0 +1,39 @@
+[General]
+
+[Host]
+apple.comscoreresearch.com = server:https://doh.dns.apple.com/query
+books.itunes.apple.com = server:https://doh.dns.apple.com/query
+cdn.apple-cloudkit.com = server:https://doh.dns.apple.com/query
+cvws.icloud-content.com = server:https://doh.dns.apple.com/query
+developer.apple.com = server:https://doh.dns.apple.com/query
+devimages-cdn.apple.com = server:https://doh.dns.apple.com/query
+devstreaming-cdn.apple.com = server:https://doh.dns.apple.com/query
+docs-assets.developer.apple.com = server:https://doh.dns.apple.com/query
+hls-svod.itunes.apple.com = server:https://doh.dns.apple.com/query
+itunes.apple.com = server:https://doh.dns.apple.com/query
+js-cdn.music.apple.com = server:https://doh.dns.apple.com/query
+lookup-api.apple.com = server:https://doh.dns.apple.com/query
+mask-api.icloud.com = server:https://doh.dns.apple.com/query
+mask-h2.icloud.com = server:https://doh.dns.apple.com/query
+mask.icloud.com = server:https://doh.dns.apple.com/query
+news-assets.apple.com = server:https://doh.dns.apple.com/query
+news-client.apple.com = server:https://doh.dns.apple.com/query
+news-edge.apple.com = server:https://doh.dns.apple.com/query
+news-events.apple.com = server:https://doh.dns.apple.com/query
+np-edge.itunes.apple.com = server:https://doh.dns.apple.com/query
+play-edge.itunes.apple.com = server:https://doh.dns.apple.com/query
+sandbox.itunes.apple.com = server:https://doh.dns.apple.com/query
+testflight.apple.com = server:https://doh.dns.apple.com/query
+DOMAIN,tv.applemusic.com = server:https://doh.dns.apple.com/query
+DOMAIN,uts-api.itunes.apple.com = server:https://doh.dns.apple.com/query
+*.apple.news = server:https://doh.dns.apple.com/query
+*.apps.apple.com = server:https://doh.dns.apple.com/query
+*.appsto.re = server:https://doh.dns.apple.com/query
+*.audio-ssl.itunes.apple.com = server:https://doh.dns.apple.com/query
+*.blobstore.apple.com = server:https://doh.dns.apple.com/query
+*.cdn-apple.com = server:https://doh.dns.apple.com/query
+*.digicert.com = server:https://doh.dns.apple.com/query
+*.hls-amt.itunes.apple.com = server:https://doh.dns.apple.com/query
+*.hls.itunes.apple.com = server:https://doh.dns.apple.com/query
+*.ocsp.apple.com = server:https://doh.dns.apple.com/query
+*.tv.apple.com = server:https://doh.dns.apple.com/query
