@@ -1,0 +1,88 @@
+# 哔哩哔哩
+DOMAIN-SUFFIX,bilibili.com
+DOMAIN-SUFFIX,bilivideo.com
+DOMAIN-SUFFIX,bilivideo.cn
+DOMAIN-SUFFIX,bilivideo.net
+DOMAIN-SUFFIX,hdslb.com
+DOMAIN-SUFFIX,hdslb.net
+DOMAIN-SUFFIX,biliapi.com
+DOMAIN-SUFFIX,biliapi.net
+DOMAIN-SUFFIX,biliimg.com
+
+# > 字节跳动
+# 艾特迷
+DOMAIN-SUFFIX,amemv.com
+# 西瓜 图片服务
+DOMAIN-SUFFIX,bdxiguaimg.com
+# 西瓜 静态资源
+DOMAIN-SUFFIX,bdxiguastatic.com
+# 字节跳动 UNPKG
+DOMAIN-SUFFIX,byted-static.com
+# 字节跳动
+DOMAIN-SUFFIX,bytedance.
+# 字节跳动 DNS
+DOMAIN-SUFFIX,bytedns.net
+# 字节跳动 CDN 文件存储
+DOMAIN-SUFFIX,bytednsdoc.com
+# 字节跳动 Goofy
+DOMAIN-SUFFIX,bytegoofy.com
+# 字节跳动 图片服务
+DOMAIN-SUFFIX,byteimg.com
+# 字节跳动 SCM
+DOMAIN-SUFFIX,bytescm.com
+# 字节跳动 TOS
+DOMAIN-SUFFIX,bytetos.com
+# 飞书企业服务平台
+DOMAIN-SUFFIX,bytexservice.com
+# 抖音
+DOMAIN-SUFFIX,douyin.com
+# 抖音 静态资源
+DOMAIN-SUFFIX,douyinpic.com
+# 抖音 静态资源
+DOMAIN-SUFFIX,douyinstatic.com
+# 抖音 静态资源
+DOMAIN-SUFFIX,douyinvod.com
+# FeelGood平台
+DOMAIN-SUFFIX,feelgood.cn
+# 飞聊官网
+DOMAIN-SUFFIX,feiliao.com
+# 快手
+DOMAIN-SUFFIX,gifshow.com
+# 火山网
+DOMAIN-SUFFIX,huoshan.com
+# 火山直播
+DOMAIN-SUFFIX,huoshanzhibo.com
+# 抖音 dapm
+DOMAIN-SUFFIX,ibytedapm.com
+# 抖音 CDN
+DOMAIN-SUFFIX,iesdouyin.com
+# 西瓜视频
+DOMAIN-SUFFIX,ixigua.com
+# 快手
+DOMAIN-SUFFIX,kspkg.com
+# 抖音 静态资源
+DOMAIN-SUFFIX,pstatp.com
+# 今日头条
+DOMAIN-SUFFIX,snssdk.com
+# 今日头条
+DOMAIN-SUFFIX,toutiao.com
+# 今日头条
+DOMAIN-SUFFIX,toutiao13.com
+# 今日头条 静态资源
+DOMAIN-SUFFIX,toutiao???.???
+# 头条云
+DOMAIN-SUFFIX,toutiaocloud.cn
+# 头条云
+DOMAIN-SUFFIX,toutiaocloud.com
+# 今日头条 建站
+DOMAIN-SUFFIX,toutiaopage.com
+# 悟空
+DOMAIN-SUFFIX,wukong.com
+# 字节跳动 API
+DOMAIN-SUFFIX,zijieapi.com
+# 字节跳动 图片服务
+DOMAIN-SUFFIX,zijieimg.com
+# 今日头条 网页版
+DOMAIN-SUFFIX,zjbyte.com
+# 字节跳动 CDN
+DOMAIN-SUFFIX,zjcdn.com
