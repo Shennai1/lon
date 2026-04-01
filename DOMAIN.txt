@@ -1,0 +1,88 @@
+# 哔哩哔哩
+.bilibili.com
+.bilivideo.com
+.bilivideo.cn
+.bilivideo.net
+.hdslb.com
+.hdslb.net
+.biliapi.com
+.biliapi.net
+.biliimg.com
+
+# > 字节跳动
+# 艾特迷
+.amemv.com
+# 西瓜 图片服务
+.bdxiguaimg.com
+# 西瓜 静态资源
+.bdxiguastatic.com
+# 字节跳动 UNPKG
+.byted-static.com
+# 字节跳动
+.bytedance.
+# 字节跳动 DNS
+.bytedns.net
+# 字节跳动 CDN 文件存储
+.bytednsdoc.com
+# 字节跳动 Goofy
+.bytegoofy.com
+# 字节跳动 图片服务
+.byteimg.com
+# 字节跳动 SCM
+.bytescm.com
+# 字节跳动 TOS
+.bytetos.com
+# 飞书企业服务平台
+.bytexservice.com
+# 抖音
+.douyin.com
+# 抖音 静态资源
+.douyinpic.com
+# 抖音 静态资源
+.douyinstatic.com
+# 抖音 静态资源
+.douyinvod.com
+# FeelGood平台
+.feelgood.cn
+# 飞聊官网
+.feiliao.com
+# 快手
+.gifshow.com
+# 火山网
+.huoshan.com
+# 火山直播
+.huoshanzhibo.com
+# 抖音 dapm
+.ibytedapm.com
+# 抖音 CDN
+.iesdouyin.com
+# 西瓜视频
+.ixigua.com
+# 快手
+.kspkg.com
+# 抖音 静态资源
+.pstatp.com
+# 今日头条
+.snssdk.com
+# 今日头条
+.toutiao.com
+# 今日头条
+.toutiao13.com
+# 今日头条 静态资源
+.toutiao???.???
+# 头条云
+.toutiaocloud.cn
+# 头条云
+.toutiaocloud.com
+# 今日头条 建站
+.toutiaopage.com
+# 悟空
+.wukong.com
+# 字节跳动 API
+.zijieapi.com
+# 字节跳动 图片服务
+.zijieimg.com
+# 今日头条 网页版
+.zjbyte.com
+# 字节跳动 CDN
+.zjcdn.com
