@@ -1,0 +1,85 @@
+name: Update mate rule
+
+on:
+  schedule:
+    # 06:17 Asia/Taipei. GitHub cron expressions use UTC.
+    - cron: "17 22 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-mate-rule
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download and merge upstream rules
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          temp_dir="$(mktemp -d)"
+          trap 'rm -rf "$temp_dir"' EXIT
+
+          sources=(
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Instagram/Instagram.list"
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Threads/Threads.list"
+            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Facebook/Facebook.list"
+          )
+
+          downloaded_files=()
+
+          for index in "${!sources[@]}"; do
+            downloaded_file="$temp_dir/source-$index.list"
+            curl --fail --silent --show-error --location --retry 3 \
+              --connect-timeout 15 --max-time 120 \
+              "${sources[$index]}" --output "$downloaded_file"
+
+            if ! grep -Eq '^[A-Z][A-Z0-9-]*,' "$downloaded_file"; then
+              echo "Invalid Surge source: ${sources[$index]}" >&2
+              exit 1
+            fi
+
+            downloaded_files+=("$downloaded_file")
+          done
+
+          {
+            printf '%s\n' \
+              '# NAME: mate' \
+              '# AUTHOR: blackmatrix7 (upstream), automatically merged by GitHub Actions' \
+              '# SOURCES: Instagram, Threads, Facebook' \
+              '# REPO: https://github.com/blackmatrix7/ios_rule_script'
+
+            awk '
+              {
+                sub(/\r$/, "")
+                if ($0 ~ /^[[:space:]]*#/ || $0 ~ /^[[:space:]]*$/) next
+                if (!seen[$0]++) print
+              }
+            ' "${downloaded_files[@]}"
+          } > mate.list
+
+          grep -Eq '^[A-Z][A-Z0-9-]*,' mate.list
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          git add mate.list
+
+          if git diff --cached --quiet; then
+            echo "No upstream changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update mate rule"
+          git push
