@@ -1,14 +1,12 @@
 #!name=Instagram Web Ad Filter - Verification
 #!desc=Filters high-confidence ad objects from Instagram Web JSON responses and adds an X-Surge-IG-Ad-Filter diagnostic header.
-#!category=Ads
-#!system=macOS,iOS
-#!author=Shennai1
-#!homepage=https://github.com/Shennai1/lon/tree/main/Instagram
-#!date=2026-08-05
-#!version=1.0.1
+# Author: Shennai1
+# Homepage: https://github.com/Shennai1/lon/tree/main/Instagram
+# Date: 2026-08-05
+# Version: 1.0.2
 
 [Script]
-ig_web_ad_filter = type=http-response, pattern=^https:\/\/(?:www\.|i\.)?instagram\.com\/(?:graphql\/query\/?|api\/v1\/(?:feed\/(?:timeline|reels_media)\/?|discover\/[^?]*|clips\/[^?]*|stories\/reel\/media\/?)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/ig_ad_filter.js
+ig_web_ad_filter = type=http-response, pattern=^https://(www\.|i\.)?instagram\.com/(graphql/query/?|api/v1/(feed/(timeline|reels_media)/?|discover/[^?]*|clips/[^?]*|stories/reel/media/?)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/ig_ad_filter.js
 
 [MITM]
 hostname = %APPEND% instagram.com, www.instagram.com, i.instagram.com
