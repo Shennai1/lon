@@ -5,7 +5,7 @@
 1. Surge 脚本有没有执行；
 2. 脚本有没有识别并删除广告节点。
 
-模块只处理 Instagram Web 常见的 GraphQL、Feed、Discover、Clips、Reels 和 Stories JSON 响应。脚本仅删除带有高置信广告标识的数组元素，不会按域名粗暴阻断 Instagram 的正常图片、视频或登录接口。
+模块使用两层过滤：直接拒绝 EasyList 已知的 `api/v1/injected_story_units/` 广告注入接口；同时处理 Instagram Web 当前使用的 `/api/graphql` 及旧式 GraphQL、Feed、Discover、Clips、Reels 和 Stories JSON 响应。脚本仅删除带有高置信广告标识的数组元素，不会按域名粗暴阻断 Instagram 的正常图片、视频或登录接口。
 
 ## 文件
 
@@ -21,7 +21,7 @@ https://github.com/Shennai1/lon/tree/main/Instagram
 Surge 模块安装链接：
 
 ```text
-https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_filter.sgmodule
+https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_filter.sgmodule?v=1.1.0
 ```
 
 脚本链接：
@@ -31,6 +31,8 @@ https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/ig_ad_filter.js
 ```
 
 模块已直接引用上述 Raw 脚本地址，并设置为每 86400 秒检查一次脚本更新。以后修改 GitHub 中的 `ig_ad_filter.js` 即可，无需重新修改模块地址。
+
+从 `1.0.x` 更新时，请用上面的 `v=1.1.0` 链接重新安装一次模块，以立即刷新 URL 匹配与 Rewrite 配置。
 
 ## 启用前
 
@@ -62,6 +64,8 @@ X-Surge-IG-Ad-Filter: ran; removed=N
 - `removed=1` 或更大：脚本执行并删除了对应数量的广告节点。
 - `skipped=invalid-json`：URL 匹配，但返回体不是可解析的 JSON。
 - 完全没有日志或响应头：优先检查 MITM、证书、脚本路径和 URL 是否命中。
+
+如果 Instagram 请求了 `api/v1/injected_story_units/`，Surge 会在请求记录中显示 URL Rewrite 的 `reject`；该请求会在进入响应脚本前被直接拦截，因此不会产生 `removed=N`。
 
 ## 建议的对照验证
 
