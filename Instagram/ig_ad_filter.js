@@ -1,11 +1,13 @@
 /*
  * Instagram Web Ad Filter for Surge
- * Version 1.3.2
+ * Version 1.3.3
  *
- * Filters only high-confidence ad objects from selected Instagram JSON
- * responses. Every matched response gets a diagnostic response header:
+ * Observes high-confidence ad objects in selected Instagram JSON responses,
+ * but never changes their bodies. Rendered ads are hidden only when their
+ * article contains Instagram's exact ad redirect URL. Every matched response
+ * gets a diagnostic response header:
  *
- *   X-Surge-IG-Ad-Filter: ran; removed=N
+ *   X-Surge-IG-Ad-Filter: ran; mode=observe-only; detected=N
  *
  * Surge's debug log also receives a line beginning with [IG Ad Filter].
  */
@@ -13,13 +15,13 @@
 (function () {
   "use strict";
 
-  var STATS_KEY = "ig_ad_filter_stats_v2";
+  var STATS_KEY = "ig_ad_filter_stats_v3";
   var MAX_DEPTH = 20;
   var MAX_VISITED_NODES = 150000;
-  var removed = 0;
+  var detected = 0;
   var visited = 0;
   var reasons = {};
-  var removedPaths = [];
+  var detectedPaths = [];
 
   var HTML_MARKER = "data-surge-ig-ad-filter=\"1\"";
 
@@ -191,10 +193,10 @@
     return "";
   }
 
-  function recordRemoval(reason, path) {
-    removed += 1;
+  function recordDetection(reason, path) {
+    detected += 1;
     reasons[reason] = (reasons[reason] || 0) + 1;
-    if (removedPaths.length < 8) removedPaths.push(path);
+    if (detectedPaths.length < 8) detectedPaths.push(path);
   }
 
   function filterTree(value, depth, path, arrayKey) {
@@ -205,7 +207,7 @@
     visited += 1;
 
     if (Array.isArray(value)) {
-      for (var i = value.length - 1; i >= 0; i -= 1) {
+      for (var i = 0; i < value.length; i += 1) {
         var itemPath = path + "[" + i + "]";
         var reason = directAdReason(value[i]);
         if (!reason && ENTRY_ARRAY_KEYS[arrayKey]) {
@@ -213,8 +215,9 @@
         }
 
         if (reason) {
-          value.splice(i, 1);
-          recordRemoval(reason, itemPath);
+          // Detection is intentionally non-mutating. Removing a Relay edge can
+          // also remove cursor/sentinel state required for later pagination.
+          recordDetection(reason, itemPath);
         } else {
           filterTree(value[i], depth + 1, itemPath, "");
         }
@@ -251,9 +254,9 @@
     try {
       var stats = readStats();
       stats.runs = (stats.runs || 0) + 1;
-      stats.modifiedResponses = (stats.modifiedResponses || 0) + (removed > 0 ? 1 : 0);
-      stats.removedItems = (stats.removedItems || 0) + removed;
-      stats.lastRemoved = removed;
+      stats.detectedResponses = (stats.detectedResponses || 0) + (detected > 0 ? 1 : 0);
+      stats.detectedItems = (stats.detectedItems || 0) + detected;
+      stats.lastDetected = detected;
       stats.lastResult = result;
       stats.lastError = errorMessage || "";
       stats.lastURL = $request && $request.url ? $request.url : "";
@@ -283,7 +286,7 @@
   if (typeof body !== "string" || body.length === 0) {
     writeStats("skipped-empty-body", "");
     console.log("[IG Ad Filter] skipped empty body: " + url);
-    $done({ headers: taggedHeaders("ran; skipped=empty-body; removed=0") });
+    $done({ headers: taggedHeaders("ran; skipped=empty-body; detected=0") });
     return;
   }
 
@@ -313,26 +316,20 @@
 
     var truncated = visited > MAX_VISITED_NODES;
     var reasonSummary = summarizeReasons();
-    var tag = "ran; removed=" + removed +
+    var tag = "ran; mode=observe-only; detected=" + detected +
       (reasonSummary ? "; reasons=" + reasonSummary : "") +
       (truncated ? "; scan=limited" : "");
     writeStats(truncated ? "scan-limited" : "ok", "");
     console.log("[IG Ad Filter] " + tag +
-      (removedPaths.length ? "; paths=" + removedPaths.join(",") : "") +
+      (detectedPaths.length ? "; paths=" + detectedPaths.join(",") : "") +
       "; url=" + url);
-
-    if (removed > 0) {
-      $done({
-        headers: taggedHeaders(tag),
-        body: JSON.stringify(root)
-      });
-    } else {
-      $done({ headers: taggedHeaders(tag) });
-    }
+    // Return headers only: omitting `body` guarantees Surge forwards the
+    // original JSON byte-for-byte, including pagination metadata.
+    $done({ headers: taggedHeaders(tag) });
   } catch (error) {
     var message = error && error.message ? error.message : String(error);
     writeStats("skipped-invalid-json", message);
     console.log("[IG Ad Filter] skipped invalid JSON; error=" + message + "; url=" + url);
-    $done({ headers: taggedHeaders("ran; skipped=invalid-json; removed=0") });
+    $done({ headers: taggedHeaders("ran; skipped=invalid-json; detected=0") });
   }
 })();
