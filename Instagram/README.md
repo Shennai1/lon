@@ -1,28 +1,36 @@
 # Instagram 网页去广告：Surge 验证版
 
-当前版本为 **v1.3.4 无状态安全模式**。它针对长时间浏览后首页变空白的问题做了第二次修复：
+当前版本为 **v1.3.5 混合安全模式**。在 v1.3.4 已解决长时间浏览后首页变空白的基础上，减少广告占位遮罩对观感的影响：
 
 - GraphQL / Feed JSON 只检测广告标记并写入诊断信息，不删除、不替换任何响应正文；
 - 不再拒绝 `api/v1/injected_story_units/`；
-- 只在 Instagram 初始 HTML 中注入纯 CSS，遮住包含 Meta 精确广告跳转链接的最近一层 `article`；
-- 保留广告文章的原始高度，避免破坏 Instagram 虚拟列表的尺寸计算；
-- 不使用 MutationObserver，不写永久 DOM 属性或内联 `display:none`，节点被复用为普通帖子后会自动恢复；
+- 只处理包含 Meta 精确广告跳转链接的最近一层 `article`；
+- 通过广告跳转链接的稳定散列，约 4/5 广告直接折叠，约 1/5 保留原高度并显示遮罩；
+- 折叠和遮罩 CSS 都要求文章**当前仍然**包含精确广告链接；节点被复用为普通帖子后，规则会自动失效；
+- 页面脚本只切换一个遮罩分类，不写永久 DOM 属性或内联样式，并在节点复用后主动移除该分类；
 - 不按“赞助”“Sponsored”等文字匹配，也不删除页面节点。
 
 ## 文件
 
 - `instagram_web_ad_filter.sgmodule`：当前模块。
 - `ig_ad_filter.js`：响应观察与页面注入脚本。
+- `instagram_web_ad_filter.v1.3.4.sgmodule`：v1.3.4 稳定回退模块。
 - `instagram_web_ad_filter.v1.3.3.sgmodule`：v1.3.3 回退模块。
 - `instagram_web_ad_filter.v1.3.2.sgmodule`：v1.3.2 回退模块。
 - `instagram_web_ad_filter.v1.3.1.sgmodule`：v1.3.1 回退模块。
 
 ## 安装与回退
 
-当前 v1.3.4：
+当前 v1.3.5：
 
 ```text
-https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_filter.sgmodule?v=1.3.4
+https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_filter.sgmodule?v=1.3.5
+```
+
+回退到 v1.3.4：
+
+```text
+https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_filter.v1.3.4.sgmodule
 ```
 
 回退到 v1.3.3：
@@ -55,15 +63,15 @@ https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_f
 X-Surge-IG-Ad-Filter: ran; mode=observe-only; detected=2; reasons=ad_object:2
 ```
 
-`detected=N` 只表示脚本看到了高置信广告记录。v1.3.4 不会根据这个结果修改 JSON，因此它不能单独证明广告已在页面中被遮住。
+`detected=N` 只表示脚本看到了高置信广告记录。v1.3.5 不会根据这个结果修改 JSON，因此它不能单独证明广告已在页面中被处理。
 
 初始 HTML 命中时会出现：
 
 ```text
-X-Surge-IG-Ad-Filter: ran; mode=html-css; injected=1
+X-Surge-IG-Ad-Filter: ran; mode=html-hybrid; overlay-rate=1/5; injected=1
 ```
 
-这表示无状态 CSS 遮罩已注入。命中时页面会保留原文章高度并显示“已隐藏一条赞助内容”。
+这表示混合过滤已注入。大部分命中广告会直接折叠，少部分会保留原文章高度并显示“已隐藏一条赞助内容”。
 
 ## 验证建议
 
@@ -77,6 +85,6 @@ X-Surge-IG-Ad-Filter: ran; mode=html-css; injected=1
 
 - Instagram 使用私有且经常变化的接口和页面结构，规则可能需要随之更新。
 - 安全模式刻意不删除网络响应，广告拦截能力会弱于浏览器内容拦截扩展。
-- 为保证虚拟列表稳定，广告位置会保留原高度并显示占位提示。
+- 为平衡观感和虚拟列表稳定性，约 1/5 广告位置仍会保留原高度并显示占位提示。
 - 没有精确广告跳转链接的广告可能不会被 CSS 遮住。
 - `max-size` 为 5 MiB，超过时 Surge 会跳过响应脚本。
