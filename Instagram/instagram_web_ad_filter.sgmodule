@@ -1,13 +1,13 @@
 #!name=Instagram Web Ad Filter - Verification
-#!desc=Experimental: removes Instagram Web ad records from responses and hides rendered posts containing exact Meta ad redirect links.
+#!desc=Experimental: removes Instagram Web ad records and conservatively hides only article-scoped rendered ads. Includes a v1.3.1 rollback path.
 # Author: Shennai1
 # Homepage: https://github.com/Shennai1/lon/tree/main/Instagram
 # Date: 2026-08-06
-# Version: 1.3.1
+# Version: 1.3.2
 
 [Script]
-ig_web_ad_filter_v131 = type=http-response, pattern=^https://(www\.|i\.)?instagram\.com/(api/graphql/?|graphql/query/?|api/v1/(feed/(timeline|reels_media)/?|discover/[^?]*|clips/[^?]*|stories/reel/media/?)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/4faf9fc7ec39c694d2f5e731bf0e5ab765638c7d/Instagram/ig_ad_filter.js
-ig_web_dom_filter_v131 = type=http-response, pattern=^https://www\.instagram\.com/(?:$|\?(?:[^#]*&)?__pwa=1(?:&|$)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/4faf9fc7ec39c694d2f5e731bf0e5ab765638c7d/Instagram/ig_ad_filter.js
+ig_web_ad_filter_v132 = type=http-response, pattern=^https://(www\.|i\.)?instagram\.com/(api/graphql/?|graphql/query/?|api/v1/(feed/(timeline|reels_media)/?|discover/[^?]*|clips/[^?]*|stories/reel/media/?)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/cf2371b4c570aa209a3c3f185b5a111823f849f2/Instagram/ig_ad_filter.js
+ig_web_dom_filter_v132 = type=http-response, pattern=^https://www\.instagram\.com/(?:$|\?(?:[^#]*&)?__pwa=1(?:&|$)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/cf2371b4c570aa209a3c3f185b5a111823f849f2/Instagram/ig_ad_filter.js
 
 [URL Rewrite]
 ^https://(www\.|i\.)?instagram\.com/api/v1/injected_story_units/ _ reject
