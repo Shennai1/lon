@@ -1,87 +1,72 @@
 # Instagram 网页去广告：Surge 验证版
 
-这套文件用于回答两个不同的问题：
+当前版本为 **v1.3.3 安全模式**。它优先解决长时间浏览后首页变空白的问题：
 
-1. Surge 脚本有没有执行；
-2. 脚本有没有识别并删除广告节点。
-
-模块使用两层过滤：直接拒绝 EasyList 已知的 `api/v1/injected_story_units/` 广告注入接口；同时处理 Instagram Web 当前使用的 `/api/graphql` 及旧式 GraphQL、Feed、Discover、Clips、Reels 和 Stories JSON 响应。脚本仅删除带有高置信广告标识的数组元素，不会按域名粗暴阻断 Instagram 的正常图片、视频或登录接口。
+- GraphQL / Feed JSON 只检测广告标记并写入诊断信息，不删除、不替换任何响应正文；
+- 不再拒绝 `api/v1/injected_story_units/`；
+- 只在 Instagram 初始 HTML 中注入页面脚本，隐藏包含 Meta 精确广告跳转链接的最近一层 `article`；
+- 不按“赞助”“Sponsored”等文字匹配，也不删除页面节点。
 
 ## 文件
 
-- `instagram_web_ad_filter.sgmodule`：Surge 模块。
-- `ig_ad_filter.js`：响应体过滤脚本。
+- `instagram_web_ad_filter.sgmodule`：当前模块。
+- `ig_ad_filter.js`：响应观察与页面注入脚本。
+- `instagram_web_ad_filter.v1.3.2.sgmodule`：v1.3.2 回退模块。
+- `instagram_web_ad_filter.v1.3.1.sgmodule`：v1.3.1 回退模块。
 
-GitHub 目录：
+## 安装与回退
 
-```text
-https://github.com/Shennai1/lon/tree/main/Instagram
-```
-
-Surge 模块安装链接：
+当前 v1.3.3：
 
 ```text
-https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_filter.sgmodule?v=1.1.0
+https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_filter.sgmodule?v=1.3.3
 ```
 
-脚本链接：
+回退到 v1.3.2：
 
 ```text
-https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/ig_ad_filter.js
+https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_filter.v1.3.2.sgmodule
 ```
 
-模块已直接引用上述 Raw 脚本地址，并设置为每 86400 秒检查一次脚本更新。以后修改 GitHub 中的 `ig_ad_filter.js` 即可，无需重新修改模块地址。
-
-从 `1.0.x` 更新时，请用上面的 `v=1.1.0` 链接重新安装一次模块，以立即刷新 URL 匹配与 Rewrite 配置。
-
-## 启用前
-
-模块会把以下主机加入 Surge MITM：
-
-- `instagram.com`
-- `www.instagram.com`
-- `i.instagram.com`
-
-HTTPS 解密必须已经启用，并且 Surge CA 证书必须由系统信任，否则脚本无法读取响应体。不要把 MITM 范围扩大到无关域名。
-
-## 如何确认脚本在运行
-
-启用模块后，重新加载 Instagram 网页并浏览首页或 Reels。在 Surge 的请求详情/脚本日志中查找：
+回退到 v1.3.1：
 
 ```text
-[IG Ad Filter] ran; removed=N
+https://raw.githubusercontent.com/Shennai1/lon/main/Instagram/instagram_web_ad_filter.v1.3.1.sgmodule
 ```
 
-匹配到的响应还会附带：
+## 启用条件
+
+模块会把 `instagram.com`、`www.instagram.com` 和 `i.instagram.com` 加入 Surge MITM。HTTPS 解密必须启用，Surge CA 证书也必须受系统信任。
+
+## 如何判断脚本在运行
+
+命中的 JSON 响应会带有类似响应头：
 
 ```text
-X-Surge-IG-Ad-Filter: ran; removed=N
+X-Surge-IG-Ad-Filter: ran; mode=observe-only; detected=2; reasons=ad_object:2
 ```
 
-含义：
+`detected=N` 只表示脚本看到了高置信广告记录。v1.3.3 不会根据这个结果修改 JSON，因此它不能单独证明广告已在页面中被隐藏。
 
-- `removed=0`：脚本已经执行，但这个响应中没有识别到广告节点。
-- `removed=1` 或更大：脚本执行并删除了对应数量的广告节点。
-- `skipped=invalid-json`：URL 匹配，但返回体不是可解析的 JSON。
-- 完全没有日志或响应头：优先检查 MITM、证书、脚本路径和 URL 是否命中。
+初始 HTML 命中时会出现：
 
-如果 Instagram 请求了 `api/v1/injected_story_units/`，Surge 会在请求记录中显示 URL Rewrite 的 `reject`；该请求会在进入响应脚本前被直接拦截，因此不会产生 `removed=N`。
+```text
+X-Surge-IG-Ad-Filter: ran; mode=html-dom; injected=1
+```
 
-## 建议的对照验证
+这表示页面隐藏逻辑已注入。广告是否被隐藏仍应通过实际页面和有/无模块的对照测试确认。
 
-为了区分 uBlock Origin Lite 与 Surge 的效果：
+## 验证建议
 
-1. 先启用此 Surge 模块，保持 uBO Lite 为“优化”，确认 Surge 日志中能看到 `ran`。
-2. 暂时把 `instagram.com` 的 uBO Lite 模式改成“不过滤”，强制刷新 Instagram，再连续浏览多批首页和 Reels。
-3. 如果 Surge 日志出现 `removed>0` 且广告没有展示，说明 Surge 脚本至少实际删除过广告节点。
-4. 保持 uBO Lite 不过滤，再临时关闭 Surge 模块并重复测试，作为对照。
-5. 测试完成后恢复你原来的 uBO Lite“优化”模式。
-
-Instagram 的广告投放并非每次请求都会出现，因此一次 `removed=0` 不能证明脚本无效；相反，出现一次 `removed>0` 就能证明脚本确实修改过响应。
+1. 保持浏览器去广告插件关闭。
+2. 完全退出 Instagram 网页 App，再重新打开。
+3. 连续向下浏览多批首页内容，重点观察是否再次变空白。
+4. 在 Surge Dashboard 中检查分页请求是否持续产生，以及响应头是否为 `mode=observe-only`。
+5. 稳定性确认后，再比较开启和关闭模块时“赞助”内容的出现情况。
 
 ## 限制
 
-- Instagram 是私有且经常变化的接口；字段或响应结构变化后可能需要更新检测逻辑。
-- 规则刻意保守。没有明确广告标识的内容不会被删除，以降低误删普通帖子和付费合作内容的风险。
-- `max-size` 设为 5 MiB。超过该大小时，Surge 会跳过脚本并原样传递响应，以避免不受控的内存占用。
-- 这是验证版，模块启用了 `debug=true`。确认稳定后可把它改为 `debug=false`。
+- Instagram 使用私有且经常变化的接口和页面结构，规则可能需要随之更新。
+- 安全模式刻意不删除网络响应，广告拦截能力会弱于浏览器内容拦截扩展。
+- 没有精确广告跳转链接的广告可能不会被页面脚本隐藏。
+- `max-size` 为 5 MiB，超过时 Surge 会跳过响应脚本。
