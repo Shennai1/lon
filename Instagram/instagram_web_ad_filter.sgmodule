@@ -1,13 +1,13 @@
 #!name=Instagram Web Ad Filter - Verification
-#!desc=Safe mode: observes Instagram Web ad records without changing JSON, and hides only article-scoped ads with an exact ad redirect link. Includes a v1.3.2 rollback path.
+#!desc=Stateless safe mode: preserves Instagram JSON and virtual-list geometry, covering only ads with an exact ad redirect link. Includes a v1.3.3 rollback path.
 # Author: Shennai1
 # Homepage: https://github.com/Shennai1/lon/tree/main/Instagram
 # Date: 2026-08-06
-# Version: 1.3.3
+# Version: 1.3.4
 
 [Script]
-ig_web_ad_observer_v133 = type=http-response, pattern=^https://(www\.|i\.)?instagram\.com/(api/graphql/?|graphql/query/?|api/v1/(feed/(timeline|reels_media)/?|discover/[^?]*|clips/[^?]*|stories/reel/media/?)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/6537cdfa8113870387678edc24bf91363cf5d249/Instagram/ig_ad_filter.js
-ig_web_dom_filter_v133 = type=http-response, pattern=^https://www\.instagram\.com/(?:$|\?(?:[^#]*&)?__pwa=1(?:&|$)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/6537cdfa8113870387678edc24bf91363cf5d249/Instagram/ig_ad_filter.js
+ig_web_ad_observer_v134 = type=http-response, pattern=^https://(www\.|i\.)?instagram\.com/(api/graphql/?|graphql/query/?|api/v1/(feed/(timeline|reels_media)/?|discover/[^?]*|clips/[^?]*|stories/reel/media/?)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/0a8b817952ba9ad7e162bf62a1fed5a4d8157700/Instagram/ig_ad_filter.js
+ig_web_css_filter_v134 = type=http-response, pattern=^https://www\.instagram\.com/(?:$|\?(?:[^#]*&)?__pwa=1(?:&|$)), requires-body=true, max-size=5242880, timeout=10, debug=true, script-update-interval=86400, script-path=https://raw.githubusercontent.com/Shennai1/lon/0a8b817952ba9ad7e162bf62a1fed5a4d8157700/Instagram/ig_ad_filter.js
 
 [MITM]
 hostname = %APPEND% instagram.com, www.instagram.com, i.instagram.com
