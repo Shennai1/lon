@@ -1,11 +1,12 @@
 /*
  * Instagram Web Ad Filter for Surge
- * Version 1.3.3
+ * Version 1.3.4
  *
  * Observes high-confidence ad objects in selected Instagram JSON responses,
- * but never changes their bodies. Rendered ads are hidden only when their
- * article contains Instagram's exact ad redirect URL. Every matched response
- * gets a diagnostic response header:
+ * but never changes their bodies. Rendered ads are covered by stateless CSS
+ * only when their article contains Instagram's exact ad redirect URL. The
+ * article keeps its layout size so Instagram's virtual list stays intact.
+ * Every matched response gets a diagnostic response header:
  *
  *   X-Surge-IG-Ad-Filter: ran; mode=observe-only; detected=N
  *
@@ -28,26 +29,20 @@
   function htmlInjectionPayload() {
     var selector = "a[href*=\"facebook.com/ads/ig_redirect/\"]," +
       "a[href*=\"instagram.com/ads/ig_redirect/\"]";
+    var adArticle = "article:has(" + selector + ")";
     var style = "<style " + HTML_MARKER + ">" +
-      "article:has(" + selector + "){display:none!important}" +
+      adArticle + "{position:relative!important}" +
+      adArticle + ">*{visibility:hidden!important}" +
+      adArticle + "::after{" +
+      "content:'已隐藏一条赞助内容';" +
+      "visibility:visible!important;" +
+      "position:absolute!important;inset:0!important;" +
+      "display:flex!important;align-items:center!important;justify-content:center!important;" +
+      "background:Canvas!important;color:GrayText!important;" +
+      "font:14px -apple-system,BlinkMacSystemFont,sans-serif!important;" +
+      "z-index:2147483647!important;pointer-events:auto!important}" +
       "</style>";
-    var script = "<script " + HTML_MARKER + ">(function(){'use strict';" +
-      "var s='" + selector + "';" +
-      "var hidden='data-surge-ig-ad-hidden';" +
-      "function hideAd(a){var article=a.closest&&a.closest('article');" +
-      "if(!article||article.hasAttribute(hidden))return;" +
-      "article.setAttribute(hidden,'1');" +
-      "article.setAttribute('aria-hidden','true');" +
-      "article.style.setProperty('display','none','important');}" +
-      "function sweep(){var list=document.querySelectorAll(s);" +
-      "for(var i=0;i<list.length;i++)hideAd(list[i]);}" +
-      "if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',sweep,{once:true});}" +
-      "else{sweep();}" +
-      "if(typeof MutationObserver!=='undefined'){" +
-      "new MutationObserver(sweep).observe(document.documentElement,{" +
-      "childList:true,subtree:true,attributes:true,attributeFilter:['href']});}" +
-      "})();</script>";
-    return style + script;
+    return style;
   }
 
   function injectHtml(body) {
@@ -298,8 +293,8 @@
 
   if (looksLikeHtml) {
     var injectedBody = injectHtml(body);
-    var htmlTag = injectedBody ? "ran; mode=html-dom; injected=1" :
-      "ran; mode=html-dom; injected=0";
+    var htmlTag = injectedBody ? "ran; mode=html-css; injected=1" :
+      "ran; mode=html-css; injected=0";
     writeStats(injectedBody ? "html-injected" : "html-already-injected", "");
     console.log("[IG Ad Filter] " + htmlTag + "; url=" + url);
     if (injectedBody) {
