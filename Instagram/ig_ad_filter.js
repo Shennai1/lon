@@ -1,6 +1,6 @@
 /*
  * Instagram Web Ad Filter for Surge
- * Version 1.3.1
+ * Version 1.3.2
  *
  * Filters only high-confidence ad objects from selected Instagram JSON
  * responses. Every matched response gets a diagnostic response header:
@@ -31,17 +31,14 @@
       "</style>";
     var script = "<script " + HTML_MARKER + ">(function(){'use strict';" +
       "var s='" + selector + "';" +
-      "var labels=['Sponsored','赞助内容','赞助','Publicidad','Gesponsert'," +
-      "'Sponsorisé','Sponsorizzato','Patrocinado','Реклама','광고','広告'];" +
-      "function hasLabel(n){var t=n&&n.innerText||'';" +
-      "for(var i=0;i<labels.length;i++){if(t.indexOf(labels[i])!==-1)return true;}" +
-      "return false;}" +
-      "function removeAd(a){var article=a.closest&&a.closest('article');" +
-      "if(article){article.remove();return;}" +
-      "var n=a;for(var d=0;n&&d<12;d++,n=n.parentElement){" +
-      "if(hasLabel(n)){n.remove();return;}}}" +
+      "var hidden='data-surge-ig-ad-hidden';" +
+      "function hideAd(a){var article=a.closest&&a.closest('article');" +
+      "if(!article||article.hasAttribute(hidden))return;" +
+      "article.setAttribute(hidden,'1');" +
+      "article.setAttribute('aria-hidden','true');" +
+      "article.style.setProperty('display','none','important');}" +
       "function sweep(){var list=document.querySelectorAll(s);" +
-      "for(var i=0;i<list.length;i++)removeAd(list[i]);}" +
+      "for(var i=0;i<list.length;i++)hideAd(list[i]);}" +
       "if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',sweep,{once:true});}" +
       "else{sweep();}" +
       "if(typeof MutationObserver!=='undefined'){" +
