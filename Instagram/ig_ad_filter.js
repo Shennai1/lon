@@ -1,6 +1,6 @@
 /*
  * Instagram Web Ad Filter for Surge
- * Version 1.3.0
+ * Version 1.3.1
  *
  * Filters only high-confidence ad objects from selected Instagram JSON
  * responses. Every matched response gets a diagnostic response header:
@@ -20,6 +20,47 @@
   var visited = 0;
   var reasons = {};
   var removedPaths = [];
+
+  var HTML_MARKER = "data-surge-ig-ad-filter=\"1\"";
+
+  function htmlInjectionPayload() {
+    var selector = "a[href*=\"facebook.com/ads/ig_redirect/\"]," +
+      "a[href*=\"instagram.com/ads/ig_redirect/\"]";
+    var style = "<style " + HTML_MARKER + ">" +
+      "article:has(" + selector + "){display:none!important}" +
+      "</style>";
+    var script = "<script " + HTML_MARKER + ">(function(){'use strict';" +
+      "var s='" + selector + "';" +
+      "var labels=['Sponsored','赞助内容','赞助','Publicidad','Gesponsert'," +
+      "'Sponsorisé','Sponsorizzato','Patrocinado','Реклама','광고','広告'];" +
+      "function hasLabel(n){var t=n&&n.innerText||'';" +
+      "for(var i=0;i<labels.length;i++){if(t.indexOf(labels[i])!==-1)return true;}" +
+      "return false;}" +
+      "function removeAd(a){var article=a.closest&&a.closest('article');" +
+      "if(article){article.remove();return;}" +
+      "var n=a;for(var d=0;n&&d<12;d++,n=n.parentElement){" +
+      "if(hasLabel(n)){n.remove();return;}}}" +
+      "function sweep(){var list=document.querySelectorAll(s);" +
+      "for(var i=0;i<list.length;i++)removeAd(list[i]);}" +
+      "if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',sweep,{once:true});}" +
+      "else{sweep();}" +
+      "if(typeof MutationObserver!=='undefined'){" +
+      "new MutationObserver(sweep).observe(document.documentElement,{" +
+      "childList:true,subtree:true,attributes:true,attributeFilter:['href']});}" +
+      "})();</script>";
+    return style + script;
+  }
+
+  function injectHtml(body) {
+    if (body.indexOf(HTML_MARKER) !== -1) return "";
+    var payload = htmlInjectionPayload();
+    var lowerBody = body.toLowerCase();
+    var headEnd = lowerBody.lastIndexOf("</head>");
+    if (headEnd !== -1) {
+      return body.slice(0, headEnd) + payload + body.slice(headEnd);
+    }
+    return payload + body;
+  }
 
   // These arrays represent individual timeline/feed records in the current
   // Instagram Web response shapes. Do not deep-match generic arrays such as
@@ -232,6 +273,13 @@
     return headers;
   }
 
+  function rewrittenHeaders(tag) {
+    var headers = taggedHeaders(tag);
+    delete headers["Content-Length"];
+    delete headers["content-length"];
+    return headers;
+  }
+
   var url = ($request && $request.url) || "";
   var body = $response && $response.body;
 
@@ -239,6 +287,26 @@
     writeStats("skipped-empty-body", "");
     console.log("[IG Ad Filter] skipped empty body: " + url);
     $done({ headers: taggedHeaders("ran; skipped=empty-body; removed=0") });
+    return;
+  }
+
+  var responseHeaders = ($response && $response.headers) || {};
+  var contentType = responseHeaders["Content-Type"] ||
+    responseHeaders["content-type"] || "";
+  var looksLikeHtml = /text\/html/i.test(contentType) ||
+    /^\s*<!doctype\s+html/i.test(body) || /^\s*<html/i.test(body);
+
+  if (looksLikeHtml) {
+    var injectedBody = injectHtml(body);
+    var htmlTag = injectedBody ? "ran; mode=html-dom; injected=1" :
+      "ran; mode=html-dom; injected=0";
+    writeStats(injectedBody ? "html-injected" : "html-already-injected", "");
+    console.log("[IG Ad Filter] " + htmlTag + "; url=" + url);
+    if (injectedBody) {
+      $done({ headers: rewrittenHeaders(htmlTag), body: injectedBody });
+    } else {
+      $done({ headers: taggedHeaders(htmlTag) });
+    }
     return;
   }
 
