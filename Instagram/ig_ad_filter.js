@@ -1,11 +1,13 @@
 /*
  * Instagram Web Ad Filter for Surge
- * Version 1.3.4
+ * Version 1.3.5
  *
  * Observes high-confidence ad objects in selected Instagram JSON responses,
- * but never changes their bodies. Rendered ads are covered by stateless CSS
- * only when their article contains Instagram's exact ad redirect URL. The
- * article keeps its layout size so Instagram's virtual list stays intact.
+ * but never changes their bodies. Rendered ads are handled by a current-match
+ * hybrid filter: roughly four fifths are collapsed and one fifth keeps a
+ * geometry-safe overlay. Every CSS rule still requires the article to contain
+ * Instagram's exact ad redirect URL, so recycled normal posts recover
+ * automatically.
  * Every matched response gets a diagnostic response header:
  *
  *   X-Surge-IG-Ad-Filter: ran; mode=observe-only; detected=N
@@ -26,14 +28,17 @@
 
   var HTML_MARKER = "data-surge-ig-ad-filter=\"1\"";
 
-  function htmlInjectionPayload() {
+  function htmlInjectionPayload(nonce) {
     var selector = "a[href*=\"facebook.com/ads/ig_redirect/\"]," +
       "a[href*=\"instagram.com/ads/ig_redirect/\"]";
+    var overlayClass = "surge-ig-ad-overlay";
     var adArticle = "article:has(" + selector + ")";
+    var overlayArticle = "article." + overlayClass + ":has(" + selector + ")";
     var style = "<style " + HTML_MARKER + ">" +
-      adArticle + "{position:relative!important}" +
-      adArticle + ">*{visibility:hidden!important}" +
-      adArticle + "::after{" +
+      adArticle + "{display:none!important}" +
+      overlayArticle + "{display:block!important;position:relative!important}" +
+      overlayArticle + ">*{visibility:hidden!important}" +
+      overlayArticle + "::after{" +
       "content:'已隐藏一条赞助内容';" +
       "visibility:visible!important;" +
       "position:absolute!important;inset:0!important;" +
@@ -42,12 +47,31 @@
       "font:14px -apple-system,BlinkMacSystemFont,sans-serif!important;" +
       "z-index:2147483647!important;pointer-events:auto!important}" +
       "</style>";
-    return style;
+    var nonceAttribute = nonce ? " nonce=\"" + nonce + "\"" : "";
+    var script = "<script data-surge-ig-ad-filter-script=\"1\"" + nonceAttribute + ">" +
+      "(function(){'use strict';" +
+      "var s=" + JSON.stringify(selector) + ",c=" + JSON.stringify(overlayClass) + ",p=false;" +
+      "function o(u){var h=0,i;for(i=0;i<u.length;i++){h=((h*31)+u.charCodeAt(i))>>>0;}return h%5===0;}" +
+      "function w(){var a=document.querySelectorAll('article'),i,l,u;for(i=0;i<a.length;i++){" +
+      "l=a[i].querySelector(s);u=l?(l.href||l.getAttribute('href')||''):'';" +
+      "a[i].classList.toggle(c,!!l&&o(u));}}" +
+      "function q(){if(p)return;p=true;var r=function(){p=false;w();};" +
+      "if(typeof requestAnimationFrame==='function'){requestAnimationFrame(r);}else{setTimeout(r,0);}}" +
+      "if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',q,{once:true});}else{q();}" +
+      "if(typeof MutationObserver!=='undefined'){new MutationObserver(q).observe(document.documentElement," +
+      "{childList:true,subtree:true,attributes:true,attributeFilter:['href']});}" +
+      "})();</script>";
+    return style + script;
+  }
+
+  function htmlNonce(body) {
+    var match = body.match(/<script\b[^>]*\bnonce=[\"']([A-Za-z0-9+/_=-]+)[\"']/i);
+    return match ? match[1] : "";
   }
 
   function injectHtml(body) {
     if (body.indexOf(HTML_MARKER) !== -1) return "";
-    var payload = htmlInjectionPayload();
+    var payload = htmlInjectionPayload(htmlNonce(body));
     var lowerBody = body.toLowerCase();
     var headEnd = lowerBody.lastIndexOf("</head>");
     if (headEnd !== -1) {
@@ -293,8 +317,8 @@
 
   if (looksLikeHtml) {
     var injectedBody = injectHtml(body);
-    var htmlTag = injectedBody ? "ran; mode=html-css; injected=1" :
-      "ran; mode=html-css; injected=0";
+    var htmlTag = injectedBody ? "ran; mode=html-hybrid; overlay-rate=1/5; injected=1" :
+      "ran; mode=html-hybrid; overlay-rate=1/5; injected=0";
     writeStats(injectedBody ? "html-injected" : "html-already-injected", "");
     console.log("[IG Ad Filter] " + htmlTag + "; url=" + url);
     if (injectedBody) {
