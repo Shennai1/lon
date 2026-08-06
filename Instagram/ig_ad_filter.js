@@ -1,13 +1,14 @@
 /*
  * Instagram Web Ad Filter for Surge
- * Version 1.3.7
+ * Version 1.3.8
  *
  * Observes high-confidence ad objects in selected Instagram JSON responses,
  * but never changes their bodies. Rendered ads are handled by a current-match
  * compact overlay: the ad article node is retained but its rendered height is
- * reduced to 120px. Every CSS rule still requires the article to contain
- * Instagram's exact ad redirect URL, so recycled normal posts recover
- * automatically. This height-changing mode is experimental.
+ * reduced to 120px. Every CSS rule still requires the article to contain a
+ * current high-confidence Meta ad redirect URL, so recycled normal posts
+ * recover automatically. Absolute, relative, and no-trailing-slash redirect
+ * forms are covered. This height-changing mode is experimental.
  * Every matched response gets a diagnostic response header:
  *
  *   X-Surge-IG-Ad-Filter: ran; mode=observe-only; detected=N
@@ -29,8 +30,9 @@
   var HTML_MARKER = "data-surge-ig-ad-filter=\"1\"";
 
   function htmlInjectionPayload() {
-    var selector = "a[href*=\"facebook.com/ads/ig_redirect/\"]," +
-      "a[href*=\"instagram.com/ads/ig_redirect/\"]";
+    var selector = "a[href*=\"facebook.com/ads/ig_redirect\" i]," +
+      "a[href*=\"instagram.com/ads/ig_redirect\" i]," +
+      "a[href^=\"/ads/ig_redirect\" i]";
     var adArticle = "article:has(" + selector + ")";
     var style = "<style " + HTML_MARKER + ">" +
       adArticle + "{" +
@@ -298,8 +300,9 @@
 
   if (looksLikeHtml) {
     var injectedBody = injectHtml(body);
-    var htmlTag = injectedBody ? "ran; mode=html-compact; compact-height=120px; injected=1" :
-      "ran; mode=html-compact; compact-height=120px; injected=0";
+    var htmlTag = injectedBody ?
+      "ran; mode=html-compact; compact-height=120px; selector-rev=2; injected=1" :
+      "ran; mode=html-compact; compact-height=120px; selector-rev=2; injected=0";
     writeStats(injectedBody ? "html-injected" : "html-already-injected", "");
     console.log("[IG Ad Filter] " + htmlTag + "; url=" + url);
     if (injectedBody) {
