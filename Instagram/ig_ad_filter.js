@@ -1,10 +1,10 @@
 /*
  * Instagram Web Ad Filter for Surge
- * Version 1.3.5
+ * Version 1.3.6
  *
  * Observes high-confidence ad objects in selected Instagram JSON responses,
  * but never changes their bodies. Rendered ads are handled by a current-match
- * hybrid filter: roughly four fifths are collapsed and one fifth keeps a
+ * hybrid filter: roughly half are collapsed and half keep a
  * geometry-safe overlay. Every CSS rule still requires the article to contain
  * Instagram's exact ad redirect URL, so recycled normal posts recover
  * automatically.
@@ -51,7 +51,7 @@
     var script = "<script data-surge-ig-ad-filter-script=\"1\"" + nonceAttribute + ">" +
       "(function(){'use strict';" +
       "var s=" + JSON.stringify(selector) + ",c=" + JSON.stringify(overlayClass) + ",p=false;" +
-      "function o(u){var h=0,i;for(i=0;i<u.length;i++){h=((h*31)+u.charCodeAt(i))>>>0;}return h%5===0;}" +
+      "function o(u){var h=0,i;for(i=0;i<u.length;i++){h=((h*31)+u.charCodeAt(i))>>>0;}return h%2===0;}" +
       "function w(){var a=document.querySelectorAll('article'),i,l,u;for(i=0;i<a.length;i++){" +
       "l=a[i].querySelector(s);u=l?(l.href||l.getAttribute('href')||''):'';" +
       "a[i].classList.toggle(c,!!l&&o(u));}}" +
@@ -317,8 +317,8 @@
 
   if (looksLikeHtml) {
     var injectedBody = injectHtml(body);
-    var htmlTag = injectedBody ? "ran; mode=html-hybrid; overlay-rate=1/5; injected=1" :
-      "ran; mode=html-hybrid; overlay-rate=1/5; injected=0";
+    var htmlTag = injectedBody ? "ran; mode=html-hybrid; overlay-rate=1/2; injected=1" :
+      "ran; mode=html-hybrid; overlay-rate=1/2; injected=0";
     writeStats(injectedBody ? "html-injected" : "html-already-injected", "");
     console.log("[IG Ad Filter] " + htmlTag + "; url=" + url);
     if (injectedBody) {
