@@ -1,5 +1,6 @@
 /*
  * Instagram Web Ad Filter for Surge
+ * Version 1.3.0
  *
  * Filters only high-confidence ad objects from selected Instagram JSON
  * responses. Every matched response gets a diagnostic response header:
@@ -12,7 +13,7 @@
 (function () {
   "use strict";
 
-  var STATS_KEY = "ig_ad_filter_stats_v1";
+  var STATS_KEY = "ig_ad_filter_stats_v2";
   var MAX_DEPTH = 20;
   var MAX_VISITED_NODES = 150000;
   var removed = 0;
@@ -58,6 +59,9 @@
     if (hasOwn(object, "ad_action_url") && isMeaningful(object.ad_action_url)) return "ad_action_url";
     if (hasOwn(object, "ad_title") && isMeaningful(object.ad_title)) return "ad_title";
     if (hasOwn(object, "ad_link_type") && isMeaningful(object.ad_link_type)) return "ad_link_type";
+    // Current Instagram Web timeline edges use `node.ad`: normal records
+    // carry null, while sponsored records carry the complete ad object.
+    if (hasOwn(object, "ad") && isMeaningful(object.ad)) return "ad_object";
     if (object.is_ad === true) return "is_ad";
     if (object.is_sponsored === true) return "is_sponsored";
     if (object.show_ad_label === true) return "show_ad_label";
