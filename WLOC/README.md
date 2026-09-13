@@ -1,10 +1,10 @@
-# WLOC Remote（Surge iOS）
+# WLOC Remote（Surge iOS / macOS）
 
 这是自托管的 Apple WLOC Surge 模块。模块和两个脚本都来自本仓库，不再依赖原作者仓库或其他 Fork。
 
 ## 安装
 
-在 Surge iOS 的“模块”页面选择“从 URL 安装”，使用：
+在 Surge 的“模块”页面选择“从 URL 安装”，使用：
 
 ```text
 https://raw.githubusercontent.com/Shennai1/lon/main/WLOC/wloc.sgmodule
