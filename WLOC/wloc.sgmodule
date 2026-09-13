@@ -1,0 +1,15 @@
+#!name=WLOC Remote
+#!desc=Apple WLOC 远程模块；脚本托管于 Shennai1/lon，不依赖原作者仓库或第三方 Fork
+#!author=Yu9191（原实现）；Shennai1（自托管）
+#!category=Tools
+#!system=ios
+#!homepage=https://github.com/Shennai1/lon/tree/main/WLOC
+#!arguments=longitude:113.94114, latitude:22.544577, accuracy:25, random_radius:0, log_level:info
+#!arguments-desc=longitude/latitude: 无持久化坐标时使用；保留默认值表示透传真实定位\naccuracy: 精度（米）\nrandom_radius: 随机扰动最大半径（米），0 为关闭\nlog_level: off/error/warn/info/debug/all\n\n持久化坐标优先于这里的参数。
+
+[Script]
+Apple WLOC Remote = type=http-response, pattern="^https?:\/\/(?:gs-loc(?:-cn)?\.apple\.com|gsp-ssl\.ls\.apple\.com|bluedot\.is\.autonavi\.com(?:\.gds\.alibabadns\.com)?)\/clls\/wloc", requires-body=true, binary-body-mode=true, max-size=-1, timeout=30, script-path=https://raw.githubusercontent.com/Shennai1/lon/main/WLOC/wloc.js, argument=longitude={{{longitude}}}&latitude={{{latitude}}}&accuracy={{{accuracy}}}&randomRadius={{{random_radius}}}&logLevel={{{log_level}}}
+WLOC Settings Remote = type=http-request, pattern="^https?:\/\/(?:(?:gs-loc(?:-cn)?\.apple\.com)|wloc\.invalid)\/wloc-settings\/save", requires-body=false, timeout=10, script-path=https://raw.githubusercontent.com/Shennai1/lon/main/WLOC/wloc-settings.js
+
+[MITM]
+hostname = %INSERT% gs-loc.apple.com, gs-loc-cn.apple.com, gsp-ssl.ls.apple.com, bluedot.is.autonavi.com, bluedot.is.autonavi.com.gds.alibabadns.com
