@@ -3,7 +3,7 @@ name: Update mate rule
 on:
   schedule:
     # 06:17 Asia/Taipei. GitHub cron expressions use UTC.
-    - cron: "17 22 * * *"
+    - cron: "17 22 * * 0-6"
   workflow_dispatch:
 
 permissions:
